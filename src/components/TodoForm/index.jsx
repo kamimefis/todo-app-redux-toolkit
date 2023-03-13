@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import {useDispatch} from 'react-redux'
-import {v4 as uuid} from 'uuid'
+import { useDispatch } from 'react-redux'
+import axios from 'axios';
+import { v4 as uuid } from 'uuid'
 
-import "./styles.css";
 import { addTodo } from "features/todos/todosSlice"
+import "./styles.css";
 
 const TodoForm = () => {
 
@@ -11,7 +12,8 @@ const TodoForm = () => {
 
     const [addTodoItem, setAddTodoItem] = useState({
         label: '',
-        checked: false
+        checked: false,
+        id: ''
     })
 
     const handleChange = e => {
@@ -23,12 +25,29 @@ const TodoForm = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        // console.log(addTodoItem);
-        dispatch(addTodo({
-            ...addTodoItem,
-            id: uuid()
-        }))
+        dispatch(addTodo(postTodoList))
+
+        setAddTodoItem({
+            label: ''
+        })
+
     }
+    console.log();
+
+    //POST
+    const postTodoList = () => (dispatch) => {
+        axios
+            .post("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/", {
+                ...addTodoItem,
+                id: uuid()
+            })
+            .then(response => {
+                console.log(response.data)
+                dispatch(addTodo(response.data))
+            })
+            .catch(error => console.log(error))
+    }
+
 
     return (
         <div>

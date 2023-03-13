@@ -18,12 +18,9 @@ export const todosSlice = createSlice({
             state.todosCounter += 1;
         },
         deleteTodo: (state, action) => {
-            const todoFoundById= state.list.find(todo => todo.id === action.payload)
-            if(todoFoundById){
-                state.list.splice(state.list.indexOf(todoFoundById, 1))
-            }
+            state.list = state.list.filter(item => item.id !== action.payload)
             state.todosCounter -= 1;
-            
+
         }
     }
 })
@@ -32,11 +29,15 @@ export const { setTodosList, addTodo, deleteTodo } = todosSlice.actions
 
 export default todosSlice.reducer
 
+
+//GET
 export const fetchTodoList = () => (dispatch) => {
     axios
         .get('https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos')
         .then(response => {
             dispatch(setTodosList(response.data))
+            console.log(response.data);
         })
         .catch(error => console.log(error))
 }
+
