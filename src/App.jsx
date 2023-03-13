@@ -9,7 +9,7 @@ const App = () => {
   return (
     <div className="root">
       <TodoList />
-      <TodoResults />
+      {/* <TodoResults /> */}
       <TodoForm />
     </div>
   );

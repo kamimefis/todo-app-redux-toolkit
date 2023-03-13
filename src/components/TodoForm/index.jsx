@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';
-import { v4 as uuid } from 'uuid'
+// import { v4 as uuid } from 'uuid'
 
 import { addTodo } from "features/todos/todosSlice"
 import "./styles.css";
@@ -9,6 +9,7 @@ import "./styles.css";
 const TodoForm = () => {
 
     const dispatch = useDispatch()
+    const { todosCounter} = useSelector(state => state.todos)
 
     const [addTodoItem, setAddTodoItem] = useState({
         label: '',
@@ -19,38 +20,26 @@ const TodoForm = () => {
     const handleChange = e => {
         setAddTodoItem({
             ...addTodoItem,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
+            id: todosCounter
         })
+        console.log(addTodoItem);
     }
 
-    const handleSubmit = e => {
+    //To post todo
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(addTodo(postTodoList))
 
-        setAddTodoItem({
-            label: ''
-        })
-
-    }
-    console.log();
-
-    //POST
-    const postTodoList = () => (dispatch) => {
-        axios
-            .post("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/", {
-                ...addTodoItem,
-                id: uuid()
-            })
-            .then(response => {
-                console.log(response.data)
-                dispatch(addTodo(response.data))
-            })
+        const response = await axios
+            .post("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/", {...addTodoItem})
+            .then(response => dispatch(addTodo(response.data)))
             .catch(error => console.log(error))
+        console.log(response, 'response');
     }
-
+    
 
     return (
-        <div>
+        <div className='todo-list-form-container'>
             <form onSubmit={handleSubmit}>
                 <input
                     name='label'
@@ -58,7 +47,7 @@ const TodoForm = () => {
                     placeholder='Enter new to do'
                     onChange={handleChange}
                 />
-                <button type='submit'>ADD TO DO</button>
+                <button className='todo-list-btn-styles todo-btn' type='submit'>ADD TO DO</button>
             </form>
 
         </div>

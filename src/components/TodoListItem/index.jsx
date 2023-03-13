@@ -2,6 +2,7 @@ import React from "react";
 import "./styles.css";
 
 const TodoListItem = ({ onCheck, checked, onDelete, label, item }) => (
+  
   <div className="todo-list-item">
     <div
       tabIndex="0"
