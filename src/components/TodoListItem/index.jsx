@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.css";
 
-const TodoListItem = ({ onCheck, checked, onDelete, label }) => (
+const TodoListItem = ({ onCheck, checked, onDelete, label, item }) => (
   <div className="todo-list-item">
     <div
       tabIndex="0"
@@ -17,6 +17,7 @@ const TodoListItem = ({ onCheck, checked, onDelete, label }) => (
       />
       <span className={checked ? "todo-list-item-checked" : ""}>{label}</span>
     </div>
+    <p>{item.label}</p>
     <button type="button" className="todo-list-item-delete" onClick={onDelete}>
       x
     </button>

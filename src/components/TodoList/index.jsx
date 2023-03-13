@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import "./styles.css";
 
 import { fetchTodoList } from "features/todos/todosSlice";
+import { deleteTodo } from "features/todos/todosSlice";
+
+import TodoListItem from "components/TodoListItem";
+import "./styles.css";
 
 const TodoList = () => {
 
-  const {list} = useSelector(state => state.todos)
+  const { list } = useSelector(state => state.todos)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -16,6 +19,8 @@ const TodoList = () => {
 
   const handleDelete = (todoId) => {
     // Fix an ability to delete task
+    // console.log(todoId);
+    dispatch(deleteTodo(todoId))
   };
 
   const toggleCheck = (todoId, isChecked) => {
@@ -27,11 +32,22 @@ const TodoList = () => {
       <span className="todo-list-title">Things to do:</span>
       <div className="todo-list-content">
         {/* Fix an ability to render todos */}
-        <ul>
+        <ul className="todo-list-items">
           {list.map((item, index) => (
-            <li key= {item.id}>{item.label}</li>
+            <li key={item.id}>
+              <TodoListItem item={item} onDelete={()=> handleDelete(item.id)} />
+            </li>
           ))}
+             
         </ul>
+        {/* <ul>
+          {list.map((item, index) => (
+            <div key={item.id}>
+              <TodoListItem item= {item} />
+              <li>{item.label}</li>
+            </div>
+          ))}
+        </ul> */}
       </div>
       <div className="no-todos">
         Looks like you&apos;re absolutely free today!
